@@ -163,7 +163,7 @@
                     border-radius: 4px;
                     color: white;
                     transition: background 0.3s;">Update Category</a>
-                            <a href="#" style="
+                            <a href="delete-category.php" style="
                     display: inline-block;
                     background-color: #f44336;
                     padding: 6px 12px;
