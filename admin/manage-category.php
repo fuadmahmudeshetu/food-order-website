@@ -7,7 +7,7 @@
         <?php
         if (isset($_SESSION['add'])) {
             echo $_SESSION['add'];
-            unset($_SESSION['add']); // optional — removes message after showing
+            unset($_SESSION['add']);
         }
         ?>
 
@@ -86,23 +86,16 @@
 
             <?php
 
-            // Query to get all categories
             $sql = "SELECT * FROM tbl_category";
 
-            // Execute query
             $result = mysqli_query($conn, $sql);
 
-            // Count rows
             $count = mysqli_num_rows($result);
 
-            // Create a serial number variable and assign it 1
             $sn = 1;
 
-            // Check whether we have data inside database or not
-
             if ($count > 0) {
-                // We have data from database 
-                // Get the data and display
+                
 
                 while ($row = mysqli_fetch_assoc($result)) {
                     $id = $row['id'];
@@ -162,9 +155,10 @@
                     </tr>
                 <?php
                 }
-            } else {
-                // We don't have data from database
-                // Display no category added
+            } 
+            else 
+            {
+                
 
                 ?>
                 <tr>
