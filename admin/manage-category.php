@@ -95,7 +95,7 @@
             $sn = 1;
 
             if ($count > 0) {
-                
+
 
                 while ($row = mysqli_fetch_assoc($result)) {
                     $id = $row['id'];
@@ -117,7 +117,30 @@
                         <td style="
                     padding: 12px 15px;
                     border: 1px solid #ddd;
-                    text-align: left;"><?php echo $image_name ?></td>
+                    text-align: left;">
+
+                            <?php
+
+                            if ($image_name != "") {
+                            ?>
+                                <img style="width: 80px;
+                                    height: 80px;          
+                                    object-fit: cover;     
+                                    border-radius: 8px;    
+                                    border: 1px solid #ccc; 
+                                    display: block;
+                                    margin: auto;" 
+                                src="<?php echo SITEURL; ?>images/category/<?php echo $image_name; ?>" alt="">
+                            <?php
+                            } else {
+                                echo "<h1>Image not found</h1>";
+                            }
+
+
+
+                            ?>
+
+                        </td>
                         <td style="
                     padding: 12px 15px;
                     border: 1px solid #ddd;
@@ -155,10 +178,8 @@
                     </tr>
                 <?php
                 }
-            } 
-            else 
-            {
-                
+            } else {
+
 
                 ?>
                 <tr>
