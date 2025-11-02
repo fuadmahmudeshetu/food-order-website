@@ -5,10 +5,10 @@
         <h1>Manage Category</h1>
 
         <?php
-            if (isset($_SESSION['add'])) {
-                echo $_SESSION['add'];
-                unset($_SESSION['add']); // optional — removes message after showing
-            }
+        if (isset($_SESSION['add'])) {
+            echo $_SESSION['add'];
+            unset($_SESSION['add']); // optional — removes message after showing
+        }
         ?>
 
 
@@ -85,7 +85,7 @@
             </tr>
 
             <?php
-            
+
             // Query to get all categories
             $sql = "SELECT * FROM tbl_category";
 
@@ -95,43 +95,49 @@
             // Count rows
             $count = mysqli_num_rows($result);
 
+            // Create a serial number variable and assign it 1
+            $sn = 1;
+
             // Check whether we have data inside database or not
 
             if ($count > 0) {
                 // We have data from database 
-            }
-            else {
-                // We don't have data from database
-            }
-            
-            ?>
+                // Get the data and display
 
-            <tr style="border-bottom: 1px solid #ddd;">
-                <td style="
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $id = $row['id'];
+                    $title = $row['title'];
+                    $image_name = $row['image_name'];
+                    $featured = $row['featured'];
+                    $active = $row['active'];
+
+            ?>
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <td style="
                     padding: 12px 15px;
                     border: 1px solid #ddd;
-                    text-align: left;">1.</td>
-                <td style="
+                    text-align: left;"><?php echo $sn++; ?></td>
+                        <td style="
                     padding: 12px 15px;
                     border: 1px solid #ddd;
-                    text-align: left;">Fuad Mahmud</td>
-                <td style="
+                    text-align: left;"><?php echo $title ?></td>
+                        <td style="
                     padding: 12px 15px;
                     border: 1px solid #ddd;
-                    text-align: left;">fuadmahmud</td>
-                <td style="
+                    text-align: left;"><?php echo $image_name ?></td>
+                        <td style="
                     padding: 12px 15px;
                     border: 1px solid #ddd;
-                    text-align: left;">fuadmahmud</td>
-                <td style="
+                    text-align: left;"><?php echo $featured ?></td>
+                        <td style="
                     padding: 12px 15px;
                     border: 1px solid #ddd;
-                    text-align: left;">fuadmahmud</td>
-                <td style="
+                    text-align: left;"><?php echo $active ?></td>
+                        <td style="
                     padding: 12px 15px;
                     border: 1px solid #ddd;
                     text-align: left;">
-                    <a href="#" style="
+                            <a href="#" style="
                     display: inline-block;
                     background-color: #4CAF50;
                     padding: 6px 12px;
@@ -141,7 +147,7 @@
                     border-radius: 4px;
                     color: white;
                     transition: background 0.3s;">Update Category</a>
-                    <a href="#" style="
+                            <a href="#" style="
                     display: inline-block;
                     background-color: #f44336;
                     padding: 6px 12px;
@@ -152,8 +158,25 @@
                     color: white;
                     transition: background 0.3s;
                     ">Delete Category</a>
-                </td>
-            </tr>
+                        </td>
+                    </tr>
+                <?php
+                }
+            } else {
+                // We don't have data from database
+                // Display no category added
+
+                ?>
+                <tr>
+                    <td colspan="6">
+                        <h2>No Category Added</h2>
+                    </td>
+                </tr>
+            <?php
+            }
+
+            ?>
+
         </table>
     </div>
 </div>
