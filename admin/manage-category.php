@@ -31,6 +31,15 @@
             box-shadow: 0 3px 6px rgba(0,0,0,0.2);
             ">
             Add Category
+
+            <?php
+            
+                if (isset($_SESSION['delete-category'])) {
+                    echo $_SESSION['delete-category'];
+                    unset($_SESSION['delete-category']);
+                }
+            
+            ?>
         </a>
         <table style="
                     width: 100%;
@@ -136,8 +145,6 @@
                                 echo "<h1>Image not found</h1>";
                             }
 
-
-
                             ?>
 
                         </td>
@@ -163,7 +170,7 @@
                     border-radius: 4px;
                     color: white;
                     transition: background 0.3s;">Update Category</a>
-                            <a href="delete-category.php" style="
+                            <a href="<?php echo SITEURL; ?>admin/delete-category.php?id=<?php echo $id ?>" style="
                     display: inline-block;
                     background-color: #f44336;
                     padding: 6px 12px;
