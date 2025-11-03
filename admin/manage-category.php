@@ -38,6 +38,11 @@
                     echo $_SESSION['delete-category'];
                     unset($_SESSION['delete-category']);
                 }
+
+                if (isset($_SESSION['remove'])) {
+                    echo $_SESSION['remove'];
+                    unset($_SESSION['remove']);
+                }
             
             ?>
         </a>

@@ -8,64 +8,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Category Page</title>
     <style>
-        form {
-            background: white;
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+            background-color: #f6f7fb;
+
+        }
+
+        .container form {
+            background-color: #fff;
             padding: 30px 40px;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            width: 350px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            /* Nice fixed width */
         }
 
-        label {
-            font-weight: 600;
-            color: #333;
+        .container form label {
+            font-weight: bold;
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
-        input[type="text"],
-        input[type="file"] {
+        .container form input[type="text"],
+        .container form input[type="file"] {
             width: 100%;
-            padding: 10px;
+            padding: 8px 10px;
             border: 1px solid #ccc;
-            border-radius: 8px;
-            outline: none;
-            transition: all 0.3s ease;
+            border-radius: 5px;
+            margin-bottom: 15px;
         }
 
-        input[type="text"]:focus,
-        input[type="file"]:focus {
-            border-color: #6a11cb;
-            box-shadow: 0 0 5px rgba(106, 17, 203, 0.3);
-        }
-
-        input[type="radio"] {
-            margin-right: 5px;
-            accent-color: #6a11cb;
-        }
-
-        br {
-            line-height: 1.5;
-        }
-
-        input[type="submit"] {
-            width: 100%;
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
+        .container form input[type="submit"] {
+            background: linear-gradient(90deg, #4a00e0, #8e2de2);
             color: white;
+            font-weight: bold;
             border: none;
-            padding: 12px;
+            padding: 10px 15px;
             border-radius: 8px;
-            font-size: 16px;
             cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            margin-top: 10px;
+            transition: 0.3s;
+            width: 100%;
         }
 
-        input[type="submit"]:hover {
-            background: linear-gradient(135deg, #2575fc, #6a11cb);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        .container form input[type="submit"]:hover {
+            opacity: 0.9;
         }
     </style>
 </head>
@@ -78,104 +67,87 @@
             <br><br>
 
             <?php
-            
+
             if (isset($_SESSION['upload'])) {
                 echo $_SESSION['upload'];
                 unset($_SESSION['upload']);
             }
-            
+
             ?>
 
 
             <!-- Add Category Form Starts -->
 
-            <form action="" method="post" enctype="multipart/form-data">
-                <label for="title">Title: </label>
-                <input type="text" name="title" placeholder="Category title" id="">
-                <br><br>
-                <label for="image">Select Image:</label>
-                <input type="file" name="image" id="">
-                <br><br>
-                <label for="featured">Featured: </label>
-                <input type="radio" name="featured" id="" value="Yes"> Yes
-                <input type="radio" name="featured" id="" value="No"> No
-                <br><br>
+            <div class="container">
+                <form action="" method="post" enctype="multipart/form-data">
+                    <label for="title">Title: </label>
+                    <input type="text" name="title" placeholder="Category title" id="">
+                    <br><br>
+                    <label for="image">Select Image:</label>
+                    <input type="file" name="image" id="">
+                    <br><br>
+                    <label for="featured">Featured: </label>
+                    <input type="radio" name="featured" id="" value="Yes"> Yes
+                    <input type="radio" name="featured" id="" value="No"> No
+                    <br><br>
 
-                <label for="active">Active: </label>
-                <input type="radio" name="active" id="" value="Yes"> Yes
-                <input type="radio" name="active" id="" value="No"> No
-                <br><br>
+                    <label for="active">Active: </label>
+                    <input type="radio" name="active" id="" value="Yes"> Yes
+                    <input type="radio" name="active" id="" value="No"> No
+                    <br><br>
 
-                <input type="submit" name="submit" value="Add Category">
-            </form>
+                    <input type="submit" name="submit" value="Add Category">
+                </form>
+            </div>
 
             <?php
 
             if (isset($_POST['submit'])) {
-                // Check Whether the submit button is clicked or not
 
-                // Get the title from form
                 $title =  $_POST['title'];
 
-                //For radio, We need to check whether the button
-
                 if (isset($_POST['featured'])) {
-                    // get the value from form
+                    
                     $featured = $_POST['featured'];
                 } else {
-                    //Set the default value
                     $featured = "No";
                 }
 
 
                 if (isset($_POST['active'])) {
-                    // get the value from form
+            
                     $active = $_POST['active'];
+
                 } else {
-                    //Set the default value
+                    
                     $active = "No";
+
                 }
 
-                // Check whether the image is selected or not and set the value for image name accordingly
                 if (isset($_FILES['image']['name'])) {
-                    # Upload the image
-                    // To Upload the image we need image name, source path and destination path
+
                     $image_name = $_FILES['image']['name'];
 
-                    //Auto rename our image 
-                    //Get the extension of the image
                     $ext = end(explode('.', $image_name));
 
-                    //Rename the image
-                    $image_name = "Food_category_".rand(0000,9999).'.'.$ext; // e.g. Food_category_2345.jpg
+                    $image_name = "Food_category_" . rand(0000, 9999) . '.' . $ext; // e.g. Food_category_2345.jpg
 
                     $source_path = $_FILES['image']['tmp_name'];
 
-                    $destination_path = "../images/category/".$image_name;
+                    $destination_path = "../images/category/" . $image_name;
 
-                    // Finally upload the image
                     $upload = move_uploaded_file($source_path, $destination_path);
 
-                    //  Check whether the image is uploaded or not
-                    // and if the image is uploaded then we will stop the process and redirect with error message
-                    
-                    if(!$upload){
+                    if (!$upload) {
                         $_SESSION['upload'] = "Failed to upload the image";
 
-                        // Redirect to add category page
-                        header('location:'.SITEURL.'admin/add-category.php');
-                        // Stop the process
+                        header('location:' . SITEURL . 'admin/add-category.php');
+                        
                         die();
                     }
+                } else {
 
                 }
-                else {
-                    //Don't upload the image_name and the the value blank
-
-                }
-
-
-                // Create sql query to insert category in to database
 
                 $sql = "INSERT INTO tbl_category SET 
                                 title = '$title',
