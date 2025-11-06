@@ -43,6 +43,12 @@
                     echo $_SESSION['remove'];
                     unset($_SESSION['remove']);
                 }
+
+
+                if (isset($_SESSION['category-not-found'])) {
+                    echo $_SESSION['category-not-found'];
+                    unset($_SESSION['category-not-found']);
+                }
             
             ?>
         </a>
@@ -165,7 +171,7 @@
                     padding: 12px 15px;
                     border: 1px solid #ddd;
                     text-align: left;">
-                            <a href="#" style="
+                            <a href="<?php echo SITEURL; ?>admin/update-category.php?id=<?php echo $id ?>" style="
                     display: inline-block;
                     background-color: #4CAF50;
                     padding: 6px 12px;

@@ -113,16 +113,33 @@
 
             $count = mysqli_num_rows($result);
 
-            
+            if ($count==1) {
+                // Get all the data
+                $row = mysqli_fetch_assoc($result);
+
+                $title = $row['title'];
+                $image_name = $row['image_name'];
+                $featured = $row['featured'];                
+                $active = $row['active'];                
+
+            }
+            else {
+                //Redirect to the manage category page with not found message
+
+                $_SESSION['category-not-found'] = "Category not found";
+                header('location:'.SITEURL.'admin/manage-category.php');
+            }
+
+
             
             ?>
 
             <form action="" method="post" enctype="multipart/form-data">
                 <label for="title">Title</label>
-                <input type="text" name="title" id="">
+                <input type="text" name="title" value="<?php echo $title ?>">
 
                 <label for="current-image">Current Image:</label>
-                <div class="">Current image will displayed here</div>
+                <div class=""><?php echo $image_name; ?></div>
 
                 <label for="new-image">New Image: </label>
                 <input type="file" name="new-image" id="">
