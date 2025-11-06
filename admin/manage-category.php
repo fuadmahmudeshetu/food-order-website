@@ -153,7 +153,7 @@
                                 src="<?php echo SITEURL; ?>images/category/<?php echo $image_name; ?>" alt="">
                             <?php
                             } else {
-                                echo "<h1>Image not found</h1>";
+                                echo "<p>Image not found</p>";
                             }
 
                             ?>

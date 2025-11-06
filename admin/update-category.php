@@ -9,7 +9,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Category Page</title>
     <style>
-
         form {
             background-color: #fff;
             padding: 30px 40px;
@@ -89,6 +88,45 @@
             color: #333;
             margin-bottom: 20px;
         }
+
+        .current-img-box {
+            width: 180px;
+            /* control the box width */
+            height: 180px;
+            /* control the box height */
+            border: 2px dashed #ccc;
+            /* subtle border to indicate an image area */
+            border-radius: 10px;
+            /* smooth corners */
+            display: flex;
+            /* center image horizontally and vertically */
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            /* hide anything outside the box */
+            background-color: #f9f9f9;
+            /* light background */
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            /* soft shadow for depth */
+            margin-bottom: 10px;
+        }
+
+        .current-img {
+            width: 100%;
+            /* make it fill the box width */
+            height: 100%;
+            /* fill height */
+            object-fit: cover;
+            /* keep proportions and crop nicely */
+            border-radius: 10px;
+            /* match the parent box’s curve */
+            transition: transform 0.3s ease;
+        }
+
+        .current-img:hover {
+            transform: scale(1.05);
+            /* slight zoom on hover */
+        }
     </style>
 </head>
 
@@ -99,7 +137,7 @@
             <br><br>
 
 
-            <?php 
+            <?php
             //Check whether the id is set or not
             $id = $_GET['id'];
 
@@ -113,25 +151,23 @@
 
             $count = mysqli_num_rows($result);
 
-            if ($count==1) {
+            if ($count == 1) {
                 // Get all the data
                 $row = mysqli_fetch_assoc($result);
 
                 $title = $row['title'];
-                $image_name = $row['image_name'];
-                $featured = $row['featured'];                
-                $active = $row['active'];                
-
-            }
-            else {
+                $current_image = $row['image_name'];
+                $featured = $row['featured'];
+                $active = $row['active'];
+            } else {
                 //Redirect to the manage category page with not found message
 
                 $_SESSION['category-not-found'] = "Category not found";
-                header('location:'.SITEURL.'admin/manage-category.php');
+                header('location:' . SITEURL . 'admin/manage-category.php');
             }
 
 
-            
+
             ?>
 
             <form action="" method="post" enctype="multipart/form-data">
@@ -139,7 +175,18 @@
                 <input type="text" name="title" value="<?php echo $title ?>">
 
                 <label for="current-image">Current Image:</label>
-                <div class=""><?php echo $image_name; ?></div>
+                <div class="current-img-box"><?php
+
+                                                if ($current_image != "") {
+                                                    // Display image
+                                                ?>
+                        <img class="current-img" src="<?php echo SITEURL; ?>images/category/<?php echo $current_image ?>" alt="">
+                    <?php
+                                                } else {
+                                                }
+
+                    ?>
+                </div>
 
                 <label for="new-image">New Image: </label>
                 <input type="file" name="new-image" id="">

@@ -107,7 +107,6 @@
                 $title =  $_POST['title'];
 
                 if (isset($_POST['featured'])) {
-                    
                     $featured = $_POST['featured'];
                 } else {
                     $featured = "No";
@@ -115,37 +114,39 @@
 
 
                 if (isset($_POST['active'])) {
-            
                     $active = $_POST['active'];
-
-                } else {
-                    
+                } else {     
                     $active = "No";
-
                 }
 
                 if (isset($_FILES['image']['name'])) {
 
                     $image_name = $_FILES['image']['name'];
 
-                    $ext = end(explode('.', $image_name));
+                    if ($image_name != "")   
+                    {
 
-                    $image_name = "Food_category_" . rand(0000, 9999) . '.' . $ext; // e.g. Food_category_2345.jpg
+                        $ext = end(explode('.', $image_name));
 
-                    $source_path = $_FILES['image']['tmp_name'];
+                        $image_name = "Food_category_" . rand(0000, 9999) . '.' . $ext; // e.g. Food_category_2345.jpg
 
-                    $destination_path = "../images/category/" . $image_name;
+                        $source_path = $_FILES['image']['tmp_name'];
 
-                    $upload = move_uploaded_file($source_path, $destination_path);
+                        $destination_path = "../images/category/" . $image_name;
 
-                    if (!$upload) {
-                        $_SESSION['upload'] = "Failed to upload the image";
+                        $upload = move_uploaded_file($source_path, $destination_path);
 
-                        header('location:' . SITEURL . 'admin/add-category.php');
-                        
-                        die();
+                        if (!$upload) {
+                            $_SESSION['upload'] = "Failed to upload the image";
+
+                            header('location:' . SITEURL . 'admin/add-category.php');
+                            
+                            die();
+                        }
                     }
-                } else {
+                } 
+                
+                else {
 
                 }
 
