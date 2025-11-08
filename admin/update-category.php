@@ -1,6 +1,8 @@
 <?php
 ob_start();
-include('partials/menu.php') ?>
+include('partials/menu.php');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -83,49 +85,34 @@ include('partials/menu.php') ?>
             box-shadow: 0 5px 15px rgba(0, 123, 255, 0.2);
         }
 
-        h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
         .current-img-box {
             width: 180px;
-            /* control the box width */
             height: 180px;
-            /* control the box height */
             border: 2px dashed #ccc;
-            /* subtle border to indicate an image area */
             border-radius: 10px;
-            /* smooth corners */
             display: flex;
-            /* center image horizontally and vertically */
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            /* hide anything outside the box */
             background-color: #f9f9f9;
-            /* light background */
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-            /* soft shadow for depth */
             margin-bottom: 10px;
         }
 
         .current-img {
             width: 100%;
-            /* make it fill the box width */
             height: 100%;
-            /* fill height */
             object-fit: cover;
-            /* keep proportions and crop nicely */
             border-radius: 10px;
-            /* match the parent box’s curve */
             transition: transform 0.3s ease;
         }
 
         .current-img:hover {
             transform: scale(1.05);
-            /* slight zoom on hover */
+        }
+
+        h1 {
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -137,84 +124,63 @@ include('partials/menu.php') ?>
             <br><br>
 
             <?php
-
             if (isset($_SESSION['update'])) {
                 echo $_SESSION['update'];
                 unset($_SESSION['update']);
             }
 
-            ?>
+            // Get category data
+            if (isset($_GET['id'])) {
+                $id = $_GET['id'];
 
-            <?php
-            //Check whether the id is set or not
-            $id = $_GET['id'];
+                $sql = "SELECT * FROM tbl_category WHERE id=$id";
+                $res = mysqli_query($conn, $sql);
 
-            //Create sql query to get all other detail
-            $sql = "SELECT * FROM tbl_category WHERE id=$id";
-
-            //Execute the query
-            $result = mysqli_query($conn, $sql);
-
-            //COunt the rows to check whether the id is valid or not
-
-            $count = mysqli_num_rows($result);
-
-            if ($count == 1) {
-                // Get all the data
-                $row = mysqli_fetch_assoc($result);
-
-                $title = $row['title'];
-                $current_image = $row['image_name'];
-                $featured = $row['featured'];
-                $active = $row['active'];
+                if (mysqli_num_rows($res) == 1) {
+                    $row = mysqli_fetch_assoc($res);
+                    $title = $row['title'];
+                    $current_image = $row['image_name'];
+                    $featured = $row['featured'];
+                    $active = $row['active'];
+                } else {
+                    $_SESSION['no-category-found'] = "Category not found.";
+                    header('location:' . SITEURL . 'admin/manage-category.php');
+                    exit();
+                }
             } else {
-                //Redirect to the manage category page with not found message
+                header('location:' . SITEURL . 'admin/manage-category.php');
+                exit();
             }
-
-
-
             ?>
 
             <form action="" method="post" enctype="multipart/form-data">
                 <label for="title">Title</label>
-                <input type="text" name="title" value="<?php echo $title ?>">
+                <input type="text" name="title" value="<?php echo $title; ?>">
 
                 <label for="current-image">Current Image:</label>
                 <div class="current-img-box">
-                    <?php
-                    if ($current_image != "") {
-                        // Display image
-                    ?>
-                        <img class="current-img" src="<?php echo SITEURL; ?>images/category/<?php echo $current_image ?>" alt="">
-                    <?php
-                    } else {
-                    }
-                    ?>
+                    <?php if ($current_image != "") { ?>
+                        <img class="current-img" src="<?php echo SITEURL; ?>images/category/<?php echo $current_image; ?>" alt="Current Image">
+                    <?php } else { ?>
+                        <span>No Image Uploaded</span>
+                    <?php } ?>
                 </div>
 
-                <label for="new-image">New Image: </label>
+                <label for="new-image">New Image:</label>
                 <input type="file" name="new-image" id="">
 
-                <label for="featured">Featured: </label>
-                <input <?php if ($featured == "Yes") {
-                            echo "checked";
-                        } ?> type="radio" name="featured" value="Yes">Yes
-                <input <?php if ($featured == "No") {
-                            echo "checked";
-                        } ?> type="radio" name="featured" value="No">No
+                <label>Featured:</label>
+                <input <?php if ($featured == "Yes") echo "checked"; ?> type="radio" name="featured" value="Yes"> Yes
+                <input <?php if ($featured == "No") echo "checked"; ?> type="radio" name="featured" value="No"> No
 
-                <label for="active">Active</label>
-                <input <?php if ($active == "Yes") {
-                            echo "checked";
-                        } ?> type="radio" name="active" value="Yes">Yes
-                <input <?php if ($active == "No") {
-                            echo "checked";
-                        } ?> type="radio" name="active" value="No">No
+                <label>Active:</label>
+                <input <?php if ($active == "Yes") echo "checked"; ?> type="radio" name="active" value="Yes"> Yes
+                <input <?php if ($active == "No") echo "checked"; ?> type="radio" name="active" value="No"> No
 
-                <input type="hidden" name="current_image" value="<?php echo $current_image; ?>" id="">
-                <input type="hidden" name="id" value="<?php echo $id ?>" id="">
-                <input type="submit" name="submit" value="submit">
+                <input type="hidden" name="current_image" value="<?php echo $current_image; ?>">
+                <input type="hidden" name="id" value="<?php echo $id; ?>">
 
+                <input type="submit" name="submit" value="Update Category">
             </form>
         </div>
     </div>
@@ -224,107 +190,79 @@ include('partials/menu.php') ?>
 
 <?php
 if (isset($_POST['submit'])) {
-    // Get data from the form
-
     $id = $_POST['id'];
     $title = $_POST['title'];
     $current_image = $_POST['current_image'];
+    $featured = $_POST['featured'] ?? "No";
+    $active = $_POST['active'] ?? "No";
 
-    if (isset($_POST['featured'])) {
-        $featured = $_POST['featured'];
-    } else {
-        $featured = "No";
-    }
+    // Handle new image upload
+    if (isset($_FILES['new-image']['name']) && $_FILES['new-image']['name'] != "") {
+        $image_name = $_FILES['new-image']['name'];
 
-    if (isset($_POST['active'])) {
-        $active = $_POST['active'];
-    } else {
-        $active = "No";
-    }
+        $temp = explode('.', $image_name);
+        $ext = end($temp);
 
-    //Updating new image if selected
-    //Check whether the image is selected or not
+        $image_name = "Food_category_" . rand(0000, 9999) . '.' . $ext;
 
-    if (isset($_FILES['image']['name'])) {
-        // get the image detail
-        $image_name = $_FILES['image']['name'];
+        $source_path = $_FILES['new-image']['tmp_name'];
+        $destination_path = "../images/category/" . $image_name;
 
-        // check whether the image is available or not
+        $upload = move_uploaded_file($source_path, $destination_path);
 
-        if($image_name != ""){
-            // image is available
+        if (!$upload) {
+            $_SESSION['upload'] = "❌ Failed to upload the image.";
+            header('location:' . SITEURL . 'admin/add-category.php');
+            die();
         }
-        else {
-            $image_name = $current_image;
+
+        // Remove the old image if it exists
+        if (!empty($current_image)) {
+            $remove_path = "../images/category/" . $current_image;
+            if (!unlink($remove_path)) {
+                $_SESSION['failed-remove'] = "❌ Failed to remove the old image.";
+                header('location:' . SITEURL . 'admin/manage-category.php');
+                die();
+            }
         }
-    }
-    else {
+    } else {
         $image_name = $current_image;
     }
 
-
-    // Update the database
+    // Update DB
     $sql2 = "UPDATE tbl_category SET
-            title = '$title',
-            featured = '$featured',
-            active = '$active'
-            WHERE id = '$id'
-        ";
+                title = '$title',
+                image_name = '$image_name',
+                featured = '$featured',
+                active = '$active'
+            WHERE id = '$id'";
 
+    $res2 = mysqli_query($conn, $sql2);
 
-    // Execute the query 
-    $result2 = mysqli_query($conn, $sql2);
-
-    if ($result2 == true) {
-        $_SESSION['update'] =
-            "<div style='position: fixed;
-                                        top: 50%;
-                                        left: 50%;
-                                        transform: translate(-50%, -50%);
-                                        background-color: #d4edda;
-                                        color: #155724;
-                                        border: 1px solid #c3e6cb;
-                                        padding: 15px 25px;
-                                        border-radius: 10px;
-                                        font-family: Arial, sans-serif;
-                                        font-size: 16px;
-                                        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-                                        text-align: center;
-                                        z-index: 9999;'>
-                                ✅ Category Updated Successfully!
-                            </div>
-                            <script>
-                                setTimeout(function(){
-                                    var popup = document.querySelector('div[style*=\"position: fixed\"]');
-                                    if(popup){ popup.style.display = 'none'; }
-                                }, 2000);
-                            </script>
-                        ";
-
-        header('location:'.SITEURL .'admin/manage-category.php');
+    if ($res2 == true) {
+        $_SESSION['update'] = "<div style='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+            background:#d4edda;color:#155724;border:1px solid #c3e6cb;padding:15px 25px;border-radius:10px;
+            font-family:Arial,sans-serif;font-size:16px;box-shadow:0 4px 10px rgba(0,0,0,0.2);text-align:center;z-index:9999;'>
+            ✅ Category Updated Successfully!
+            </div>
+            <script>
+                setTimeout(function(){
+                    var popup=document.querySelector('div[style*=\"position:fixed\"]');
+                    if(popup){ popup.style.display='none'; }
+                },2000);
+            </script>";
+        header('location:' . SITEURL . 'admin/manage-category.php');
         exit();
     } else {
-        $_SESSION['update'] = "<div style='position: fixed; 
-                                top: 50%; 
-                                left: 50%; 
-                                transform: translate(-50%, -50%); 
-                                background-color: #f8d7da; 
-                                color: #721c24; 
-                                border: 1px solid #f5c6cb; 
-                                padding: 20px 30px; 
-                                border-radius: 10px; 
-                                font-family: Arial, sans-serif; 
-                                font-size: 16px; 
-                                box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
-                                text-align: center;'>
-                            ❌ Category Update Failed!
-                            </div>
-                            ";
-        // Redirect to add category page
-        header('location:' . SITEURL . 'admin/update-category.php');
+        $_SESSION['update'] = "<div style='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+            background:#f8d7da;color:#721c24;border:1px solid #f5c6cb;padding:20px 30px;border-radius:10px;
+            font-family:Arial,sans-serif;font-size:16px;box-shadow:0 4px 10px rgba(0,0,0,0.2);text-align:center;'>
+            ❌ Category Update Failed!
+            </div>";
+        header('location:' . SITEURL . 'admin/update-category.php?id=' . $id);
+        exit();
     }
 }
 ?>
 
-
-<?php include('partials/footer.php') ?>
+<?php include('partials/footer.php'); ?>

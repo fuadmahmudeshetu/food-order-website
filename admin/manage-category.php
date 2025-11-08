@@ -52,16 +52,19 @@ include('partials/menu.php');
                     unset($_SESSION['remove']);
                 }
 
-
                 if (isset($_SESSION['category-not-found'])) {
                     echo $_SESSION['category-not-found'];
                     unset($_SESSION['category-not-found']);
                 }
 
-
                 if (isset($_SESSION['update'])) {
                     echo $_SESSION['update'];
                     unset($_SESSION['update']);
+                }
+
+                if (isset($_SESSION['failed-remove'])) {
+                    echo $_SESSION['failed-remove'];
+                    unset($_SESSION['failed-remove']);
                 }
             
             ?>
