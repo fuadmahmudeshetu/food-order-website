@@ -1,14 +1,22 @@
-<?php include('partials/menu.php'); ?>
+<?php
+include('partials/menu.php'); 
+?>
 
 <div class="main-content">
     <div class="wrapper">
         <h1>Manage Category</h1>
 
         <?php
-        if (isset($_SESSION['add'])) {
-            echo $_SESSION['add'];
-            unset($_SESSION['add']);
-        }
+            if (isset($_SESSION['add'])) {
+                echo $_SESSION['add'];
+                unset($_SESSION['add']);
+            }
+
+            if (isset($_SESSION['upload'])) {
+                echo $_SESSION['upload'];
+                unset($_SESSION['upload']);
+            }
+            
         ?>
 
 
@@ -48,6 +56,12 @@
                 if (isset($_SESSION['category-not-found'])) {
                     echo $_SESSION['category-not-found'];
                     unset($_SESSION['category-not-found']);
+                }
+
+
+                if (isset($_SESSION['update'])) {
+                    echo $_SESSION['update'];
+                    unset($_SESSION['update']);
                 }
             
             ?>

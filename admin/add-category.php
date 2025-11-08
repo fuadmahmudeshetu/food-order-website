@@ -66,15 +66,6 @@
             <h1>Add Category</h1>
             <br><br>
 
-            <?php
-
-            if (isset($_SESSION['upload'])) {
-                echo $_SESSION['upload'];
-                unset($_SESSION['upload']);
-            }
-
-            ?>
-
 
             <!-- Add Category Form Starts -->
 

@@ -1,6 +1,6 @@
-<?php include('partials/menu.php') ?>
-
-
+<?php
+ob_start();
+include('partials/menu.php') ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -136,6 +136,14 @@
             <h1>Update Category</h1>
             <br><br>
 
+            <?php
+
+            if (isset($_SESSION['update'])) {
+                echo $_SESSION['update'];
+                unset($_SESSION['update']);
+            }
+
+            ?>
 
             <?php
             //Check whether the id is set or not
@@ -161,9 +169,6 @@
                 $active = $row['active'];
             } else {
                 //Redirect to the manage category page with not found message
-
-                $_SESSION['category-not-found'] = "Category not found";
-                header('location:' . SITEURL . 'admin/manage-category.php');
             }
 
 
@@ -175,16 +180,15 @@
                 <input type="text" name="title" value="<?php echo $title ?>">
 
                 <label for="current-image">Current Image:</label>
-                <div class="current-img-box"><?php
-
-                                                if ($current_image != "") {
-                                                    // Display image
-                                                ?>
+                <div class="current-img-box">
+                    <?php
+                    if ($current_image != "") {
+                        // Display image
+                    ?>
                         <img class="current-img" src="<?php echo SITEURL; ?>images/category/<?php echo $current_image ?>" alt="">
                     <?php
-                                                } else {
-                                                }
-
+                    } else {
+                    }
                     ?>
                 </div>
 
@@ -192,22 +196,135 @@
                 <input type="file" name="new-image" id="">
 
                 <label for="featured">Featured: </label>
-                <input type="radio" name="featured">Yes
-                <input type="radio" name="featured">No
+                <input <?php if ($featured == "Yes") {
+                            echo "checked";
+                        } ?> type="radio" name="featured" value="Yes">Yes
+                <input <?php if ($featured == "No") {
+                            echo "checked";
+                        } ?> type="radio" name="featured" value="No">No
 
                 <label for="active">Active</label>
-                <input type="radio" name="active">Yes
-                <input type="radio" name="active">No
+                <input <?php if ($active == "Yes") {
+                            echo "checked";
+                        } ?> type="radio" name="active" value="Yes">Yes
+                <input <?php if ($active == "No") {
+                            echo "checked";
+                        } ?> type="radio" name="active" value="No">No
 
-                <input type="submit" name="submit" value="Update Category">
+                <input type="hidden" name="current_image" value="<?php echo $current_image; ?>" id="">
+                <input type="hidden" name="id" value="<?php echo $id ?>" id="">
+                <input type="submit" name="submit" value="submit">
 
             </form>
-
         </div>
     </div>
 </body>
 
 </html>
+
+<?php
+if (isset($_POST['submit'])) {
+    // Get data from the form
+
+    $id = $_POST['id'];
+    $title = $_POST['title'];
+    $current_image = $_POST['current_image'];
+
+    if (isset($_POST['featured'])) {
+        $featured = $_POST['featured'];
+    } else {
+        $featured = "No";
+    }
+
+    if (isset($_POST['active'])) {
+        $active = $_POST['active'];
+    } else {
+        $active = "No";
+    }
+
+    //Updating new image if selected
+    //Check whether the image is selected or not
+
+    if (isset($_FILES['image']['name'])) {
+        // get the image detail
+        $image_name = $_FILES['image']['name'];
+
+        // check whether the image is available or not
+
+        if($image_name != ""){
+            // image is available
+        }
+        else {
+            $image_name = $current_image;
+        }
+    }
+    else {
+        $image_name = $current_image;
+    }
+
+
+    // Update the database
+    $sql2 = "UPDATE tbl_category SET
+            title = '$title',
+            featured = '$featured',
+            active = '$active'
+            WHERE id = '$id'
+        ";
+
+
+    // Execute the query 
+    $result2 = mysqli_query($conn, $sql2);
+
+    if ($result2 == true) {
+        $_SESSION['update'] =
+            "<div style='position: fixed;
+                                        top: 50%;
+                                        left: 50%;
+                                        transform: translate(-50%, -50%);
+                                        background-color: #d4edda;
+                                        color: #155724;
+                                        border: 1px solid #c3e6cb;
+                                        padding: 15px 25px;
+                                        border-radius: 10px;
+                                        font-family: Arial, sans-serif;
+                                        font-size: 16px;
+                                        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+                                        text-align: center;
+                                        z-index: 9999;'>
+                                ✅ Category Updated Successfully!
+                            </div>
+                            <script>
+                                setTimeout(function(){
+                                    var popup = document.querySelector('div[style*=\"position: fixed\"]');
+                                    if(popup){ popup.style.display = 'none'; }
+                                }, 2000);
+                            </script>
+                        ";
+
+        header('location:'.SITEURL .'admin/manage-category.php');
+        exit();
+    } else {
+        $_SESSION['update'] = "<div style='position: fixed; 
+                                top: 50%; 
+                                left: 50%; 
+                                transform: translate(-50%, -50%); 
+                                background-color: #f8d7da; 
+                                color: #721c24; 
+                                border: 1px solid #f5c6cb; 
+                                padding: 20px 30px; 
+                                border-radius: 10px; 
+                                font-family: Arial, sans-serif; 
+                                font-size: 16px; 
+                                box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
+                                text-align: center;'>
+                            ❌ Category Update Failed!
+                            </div>
+                            ";
+        // Redirect to add category page
+        header('location:' . SITEURL . 'admin/update-category.php');
+    }
+}
+?>
 
 
 <?php include('partials/footer.php') ?>
