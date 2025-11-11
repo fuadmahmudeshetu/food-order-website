@@ -181,7 +181,7 @@
                     padding: 12px 15px;
                     border: 1px solid #ddd;
                     text-align: left;">
-                            <a href="#" style="
+                            <a href="<?php echo SITEURL; ?>admin/update-food.php?id=<?php echo $id; ?>" style="
                     display: inline-block;
                     background-color: #4CAF50;
                     padding: 6px 12px;
