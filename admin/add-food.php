@@ -148,18 +148,38 @@
                     <label for="category">Select Category</label>
                     <select name="category" id="">
                         <?php
-                            // Create php code to display categories from database
-                            // Create sql to get all active categories form database
+                        // Create php code to display categories from database
+                        // Create sql to get all active categories form database
 
-                            $sql = "SELECT * FROM tbl_category WHERE active = 'Yes'";
+                        $sql = "SELECT * FROM tbl_category WHERE active = 'Yes'";
 
-                            $result = mysqli_query($conn, $sql);
-                    
-                         ?>
+                        $result = mysqli_query($conn, $sql);
 
+                        // Count rows to check whether we have category or not
+                        $count = mysqli_num_rows($result);
 
-                        <option value="1">Food</option>
-                        <option value="2">Snacks</option>
+                        if ($count > 0) {
+                            // Display category
+
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                $id = $row['id'];
+                                $title = $row['title'];
+
+                                ?>
+                                    <option value="<?php echo $id; ?>"><?php echo $title; ?></option>
+                                <?php
+                            }
+
+                            
+                        } else {
+                            //No category
+                            ?>
+                                <option value="0">No Category Found</option>
+                            <?php
+                        }
+
+                        ?>
+
                     </select>
 
                     <label for="featured">Featured</label>
@@ -184,19 +204,26 @@
 
 <?php
 
-    if (isset($_POST['submit'])) {
-        // Get the values form the form 
+if (isset($_POST['submit'])) {
 
-        $title = $_POST['title'];
-        $description = $_POST['description'];
-        $price = $_POST['price'];
+    // Get the data from form
 
-        $sql = "SELECT * FROM tbl_food SET title='$title', description = '$description', price = '$price'";
+    $title = $_POST['title'];
+    $description = $_POST['description'];
+    $price = $_POST['price'];
 
-        echo $sql;
+    
 
-    }
+    // Upload the image if selected
 
- ?>
+    // Insert into database 
+
+    // Redirect with message
+
+
+
+}
+
+?>
 
 <?php include('partials/footer.php'); ?>

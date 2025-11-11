@@ -141,7 +141,7 @@ include('partials/menu.php');
                     $featured = $row['featured'];
                     $active = $row['active'];
 
-            ?>
+                ?>
                     <tr style="border-bottom: 1px solid #ddd;">
                         <td style="
                     padding: 12px 15px;
