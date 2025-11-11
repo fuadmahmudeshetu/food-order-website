@@ -154,8 +154,7 @@
                             $sql = "SELECT * FROM tbl_category WHERE active = 'Yes'";
 
                             $result = mysqli_query($conn, $sql);
-                        
-                        
+                    
                          ?>
 
 

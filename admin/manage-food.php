@@ -5,7 +5,7 @@
         <h1>Manage Food</h1>
 
 
-        <a href="add-admin.php" style="
+        <a href="<?php echo SITEURL; ?>admin/add-food.php" style="
             display: inline-block;
             background-color: #1da1f2; /* blue */
             color: white;
