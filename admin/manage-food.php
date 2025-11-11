@@ -186,7 +186,7 @@
                     border-radius: 4px;
                     color: white;
                     transition: background 0.3s;">Update Admin</a>
-                    <a href="#" style="
+                    <a href="<?php echo SITEURL; ?>admin/delete-food.php?id=<?php echo $id; ?>" style="
                     display: inline-block;
                     background-color: #f44336;
                     padding: 6px 12px;
