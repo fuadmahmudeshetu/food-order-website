@@ -58,8 +58,6 @@
             // Redirect to manage-category page
             $_SESSION['delete-category'] = "Field to delete the category, please try again";
             header('location:' . SITEURL . 'admin/manage-category.php');
-
-            header('location:' . SITEURL . 'admin/manage-admin.php');
         }
 
     }

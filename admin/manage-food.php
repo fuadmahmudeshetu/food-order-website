@@ -9,6 +9,11 @@
             echo $_SESSION['add'];
             unset($_SESSION['add']);
         }
+
+        if (isset($_SESSION['delete-food'])) {
+            echo $_SESSION['delete-food'];
+            unset($_SESSION['delete-food']);
+        }
         ?>
 
 
@@ -119,64 +124,64 @@
                     $featured = $row['featured'];
                     $active = $row['active'];
 
-                    ?>
+            ?>
 
                     <tr style="border-bottom: 1px solid #ddd;">
-                
-                <td style="
+
+                        <td style="
                     padding: 12px 15px;
                     border: 1px solid #ddd;
                     text-align: left;"><?php echo $sn++; ?></td>
-                <td style="
+                        <td style="
                     padding: 12px 15px;
                     border: 1px solid #ddd;
                     text-align: left;"><?php echo $title; ?></td>
-                <td style="
+                        <td style="
                     padding: 12px 15px;
                     border: 1px solid #ddd;
-                    text-align: left;"><?php echo $price; ?></td>
-                
-                <td style="
+                    text-align: left;">$<?php echo $price; ?></td>
+
+                        <td style="
                     padding: 12px 15px;
                     border: 1px solid #ddd;
                     text-align: left;"><?php echo $description; ?></td>
-                <td style="
+                        <td style="
                     padding: 12px 15px;
                     border: 1px solid #ddd;
                     text-align: left;">
-                    <?php
+                            <?php
 
-                    if ($image_name != "") {
-                    ?>
-                        <img style="width: 100px;
+                            if ($image_name != "") {
+                            ?>
+                                <img style="width: 100px;
                                     height: 100px;          
                                     object-fit: cover;     
                                     border-radius: 8px;    
                                     border: 1px solid #ccc; 
                                     display: block;
                                     margin: auto;"
-                            src="<?php echo SITEURL; ?>images/food/<?php echo $image_name; ?>" alt="">
-                    <?php
-                    } else {
-                        echo "<p>Image not found</p>";
-                    }
+                                    src="<?php echo SITEURL; ?>images/food/<?php echo $image_name; ?>" alt="">
+                            <?php
+                            } else {
+                                echo "<p>Image not found</p>";
+                            }
 
-                    ?>
+                            ?>
 
-                </td>
-                <td style="
+                        </td>
+                        <td style="
                     padding: 12px 15px;
                     border: 1px solid #ddd;
                     text-align: left;"><?php echo $featured ?></td>
-                <td style="
+                        <td style="
                     padding: 12px 15px;
                     border: 1px solid #ddd;
                     text-align: left;"><?php echo $active; ?></td>
-                <td style="
+                        <td style="
                     padding: 12px 15px;
                     border: 1px solid #ddd;
                     text-align: left;">
-                    <a href="#" style="
+                            <a href="#" style="
                     display: inline-block;
                     background-color: #4CAF50;
                     padding: 6px 12px;
@@ -186,7 +191,7 @@
                     border-radius: 4px;
                     color: white;
                     transition: background 0.3s;">Update Admin</a>
-                    <a href="<?php echo SITEURL; ?>admin/delete-food.php?id=<?php echo $id; ?>" style="
+                    <a href="<?php echo SITEURL; ?>admin/delete-food.php?id=<?php echo $id; ?>&image_name=<?php echo $image_name; ?>" style="
                     display: inline-block;
                     background-color: #f44336;
                     padding: 6px 12px;
@@ -197,12 +202,12 @@
                     color: white;
                     transition: background 0.3s;
                     ">Delete Admin</a>
-                </td>
-            </tr>
-            
-            <?php 
-            } 
-        } else {
+                        </td>
+                    </tr>
+
+                <?php
+                }
+            } else {
                 ?>
                 <tr>
                     <td colspan="6">
@@ -213,7 +218,7 @@
             }
 
             ?>
-            
+
         </table>
     </div>
 </div>

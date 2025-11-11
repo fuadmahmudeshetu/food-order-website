@@ -198,7 +198,8 @@ include('partials/menu.php');
                     border-radius: 4px;
                     color: white;
                     transition: background 0.3s;">Update Category</a>
-                            <a href="<?php echo SITEURL; ?>admin/delete-category.php?id=<?php echo $id ?>&image_name=<?php echo $image_name; ?>" style="
+
+                    <a href="<?php echo SITEURL; ?>admin/delete-category.php?id=<?php echo $id; ?>&image_name=<?php echo $image_name; ?>" style="
                     display: inline-block;
                     background-color: #f44336;
                     padding: 6px 12px;
