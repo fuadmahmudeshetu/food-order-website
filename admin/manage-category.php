@@ -214,8 +214,7 @@ include('partials/menu.php');
                 <?php
                 }
             } else {
-
-
+                
                 ?>
                 <tr>
                     <td colspan="6">

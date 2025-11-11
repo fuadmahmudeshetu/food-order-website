@@ -5,10 +5,10 @@
         <h1>Manage Food</h1>
 
         <?php
-            if (isset($_SESSION['add'])) {
-                echo $_SESSION['add'];
-                unset($_SESSION['add']);
-            }
+        if (isset($_SESSION['add'])) {
+            echo $_SESSION['add'];
+            unset($_SESSION['add']);
+        }
         ?>
 
 
@@ -52,14 +52,44 @@
                     padding: 12px 15px;
                     text-align: left;
                     border: 1px solid #ddd;">
-                    Full Name
+                    Title
                 </th>
                 <th style="background-color: #4CAF50; /* green header */
                     color: white;
                     padding: 12px 15px;
                     text-align: left;
                     border: 1px solid #ddd;">
-                    Username
+                    Price
+                </th>
+
+                <th style="background-color: #4CAF50; /* green header */
+                    color: white;
+                    padding: 12px 15px;
+                    text-align: left;
+                    border: 1px solid #ddd;">
+                    Description
+                </th>
+
+                <th style="background-color: #4CAF50; /* green header */
+                    color: white;
+                    padding: 12px 15px;
+                    text-align: left;
+                    border: 1px solid #ddd;">
+                    Image
+                </th>
+                <th style="background-color: #4CAF50; /* green header */
+                    color: white;
+                    padding: 12px 15px;
+                    text-align: left;
+                    border: 1px solid #ddd;">
+                    Featured
+                </th>
+                <th style="background-color: #4CAF50; /* green header */
+                    color: white;
+                    padding: 12px 15px;
+                    text-align: left;
+                    border: 1px solid #ddd;">
+                    Active
                 </th>
                 <th style="background-color: #4CAF50; /* green header */
                     color: white;
@@ -70,19 +100,78 @@
                 </th>
             </tr>
 
-            <tr style="border-bottom: 1px solid #ddd;">
+            <?php
+            $sql = "SELECT * FROM tbl_food";
+
+            $result = mysqli_query($conn, $sql);
+
+            $count = mysqli_num_rows($result);
+
+            $sn = 1;
+
+            if ($count > 1) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $id = $row['id'];
+                    $title = $row['title'];
+                    $price = $row['price'];
+                    $description = $row['description'];
+                    $image_name = $row['image_name'];
+                    $featured = $row['featured'];
+                    $active = $row['active'];
+
+                    ?>
+
+                    <tr style="border-bottom: 1px solid #ddd;">
+                
                 <td style="
                     padding: 12px 15px;
                     border: 1px solid #ddd;
-                    text-align: left;">1.</td>
+                    text-align: left;"><?php echo $sn++; ?></td>
                 <td style="
                     padding: 12px 15px;
                     border: 1px solid #ddd;
-                    text-align: left;">Fuad Mahmud</td>
+                    text-align: left;"><?php echo $title; ?></td>
                 <td style="
                     padding: 12px 15px;
                     border: 1px solid #ddd;
-                    text-align: left;">fuadmahmud</td>
+                    text-align: left;"><?php echo $price; ?></td>
+                
+                <td style="
+                    padding: 12px 15px;
+                    border: 1px solid #ddd;
+                    text-align: left;"><?php echo $description; ?></td>
+                <td style="
+                    padding: 12px 15px;
+                    border: 1px solid #ddd;
+                    text-align: left;">
+                    <?php
+
+                    if ($image_name != "") {
+                    ?>
+                        <img style="width: 80px;
+                                    height: 80px;          
+                                    object-fit: cover;     
+                                    border-radius: 8px;    
+                                    border: 1px solid #ccc; 
+                                    display: block;
+                                    margin: auto;"
+                            src="<?php echo SITEURL; ?>images/food/<?php echo $image_name; ?>" alt="">
+                    <?php
+                    } else {
+                        echo "<p>Image not found</p>";
+                    }
+
+                    ?>
+
+                </td>
+                <td style="
+                    padding: 12px 15px;
+                    border: 1px solid #ddd;
+                    text-align: left;"><?php echo $featured ?></td>
+                <td style="
+                    padding: 12px 15px;
+                    border: 1px solid #ddd;
+                    text-align: left;"><?php echo $active; ?></td>
                 <td style="
                     padding: 12px 15px;
                     border: 1px solid #ddd;
@@ -110,6 +199,21 @@
                     ">Delete Admin</a>
                 </td>
             </tr>
+            
+            <?php 
+            } 
+        } else {
+                ?>
+                <tr>
+                    <td colspan="6">
+                        <h2>No Category Added</h2>
+                    </td>
+                </tr>
+            <?php
+            }
+
+            ?>
+            
         </table>
     </div>
 </div>
