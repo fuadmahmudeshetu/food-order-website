@@ -1,7 +1,18 @@
+<?php
+include('../config/constants.php');
+
+// PROCESS FORM BEFORE ANY HTML
+if (isset($_POST['submit'])) {
+
+    // Example: handle upload & DB insert
+
+    // REDIRECT BEFORE ANY HTML
+    header('Location: ' . SITEURL . 'admin/manage-food.php');
+    exit();
+}
+?>
+
 <?php include('partials/menu.php'); ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -143,7 +154,7 @@
                     <input type="number" name="price" placeholder="Enter price" id="">
 
                     <label for="image">Select Image</label>
-                    <input type="file" name="image" id="">
+                    <input type="file" name="image">
 
                     <label for="category">Select Category</label>
                     <select name="category" id="">
@@ -165,17 +176,15 @@
                                 $id = $row['id'];
                                 $title = $row['title'];
 
-                                ?>
-                                    <option value="<?php echo $id; ?>"><?php echo $title; ?></option>
-                                <?php
+                        ?>
+                                <option value="<?php echo $id; ?>"><?php echo $title; ?></option>
+                            <?php
                             }
-
-                            
                         } else {
                             //No category
                             ?>
-                                <option value="0">No Category Found</option>
-                            <?php
+                            <option value="0">No Category Found</option>
+                        <?php
                         }
 
                         ?>
@@ -190,7 +199,7 @@
                     <input type="radio" name="active" id="" value="Yes"> Yes
                     <input type="radio" name="active" id="" value="No"> No
 
-                    <input type="submit" name="submit" id="" value="Add Food">
+                    <input type="submit" name="submit" value="Add Food">
 
                 </form>
             </div>
@@ -203,6 +212,7 @@
 </html>
 
 <?php
+ob_start();
 
 if (isset($_POST['submit'])) {
 
@@ -211,19 +221,117 @@ if (isset($_POST['submit'])) {
     $title = $_POST['title'];
     $description = $_POST['description'];
     $price = $_POST['price'];
+    $category = $_POST['category'];
 
-    
+    if (isset($_FILES['image']['name'])) {
 
-    // Upload the image if selected
+        $image_name = $_FILES['image']['name'];
+
+        if ($image_name != "") {
+
+            $parts = explode('.', $image_name);
+
+            $ext = end($parts);
+
+            $image_name = "Food_category_" . rand(0000, 9999) . '.' . $ext; // e.g. Food_category_2345.jpg
+
+            $source_path = $_FILES['image']['tmp_name'];
+
+            $destination_path = "../images/food/" . $image_name;
+
+            $upload = move_uploaded_file($source_path, $destination_path);
+
+            if (!$upload) {
+                $_SESSION['upload'] = "Failed to upload the image";
+
+                header('location:' . SITEURL . 'admin/add-category.php');
+
+                die();
+            }
+        }
+    } else {
+    }
+
+    if (isset($_POST['featured'])) {
+        $featured = $_POST['featured'];
+    } else {
+        $featured = "No";
+    }
+
+    if (isset($_POST['active'])) {
+        $active = $_POST['active'];
+    } else {
+        $active = "No";
+    }
 
     // Insert into database 
 
-    // Redirect with message
+    $sql2 = "INSERT INTO tbl_food SET 
+                title = '$title',
+                price = $price,
+                description = '$description',
+                image_name = '$image_name',
+                category_id = $category,
+                featured = '$featured',
+                active = '$active'
+            ";
 
+    $result2 = mysqli_query($conn, $sql2);
 
+    if ($result2 == true) {
+        $_SESSION['add'] =
+            "<div style='position: fixed;
+                                        top: 50%;
+                                        left: 50%;
+                                        transform: translate(-50%, -50%);
+                                        background-color: #d4edda;
+                                        color: #155724;
+                                        border: 1px solid #c3e6cb;
+                                        padding: 15px 25px;
+                                        border-radius: 10px;
+                                        font-family: Arial, sans-serif;
+                                        font-size: 16px;
+                                        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+                                        text-align: center;
+                                        z-index: 9999;'>
+                                ✅ Category Added Successfully!
+                            </div>
+                            <script>
+                                setTimeout(function(){
+                                    var popup = document.querySelector('div[style*=\"position: fixed\"]');
+                                    if(popup){ popup.style.display = 'none'; }
+                                }, 2000);
+                            </script>
+                        ";
 
+        // Redirect to the the add category page
+        header('location:' . SITEURL . 'admin/manage-food.php');
+        exit();
+    } else {
+
+        $_SESSION['add'] = "<div style='position: fixed; 
+                                    top: 50%; 
+                                    left: 50%; 
+                                    transform: translate(-50%, -50%); 
+                                    background-color: #f8d7da; 
+                                    color: #721c24; 
+                                    border: 1px solid #f5c6cb; 
+                                    padding: 20px 30px; 
+                                    border-radius: 10px; 
+                                    font-family: Arial, sans-serif; 
+                                    font-size: 16px; 
+                                    box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
+                                    text-align: center;'>
+                        ❌ Category Adding Failed!
+                        </div>
+                        ";
+        // Redirect to add category page
+        header('location:' . SITEURL . 'admin/add-food.php');
+        exit();
+    }
 }
 
+ob_end_flush();
 ?>
 
 <?php include('partials/footer.php'); ?>
