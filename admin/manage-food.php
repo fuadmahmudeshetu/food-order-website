@@ -4,6 +4,13 @@
     <div class="wrapper">
         <h1>Manage Food</h1>
 
+        <?php
+            if (isset($_SESSION['add'])) {
+                echo $_SESSION['add'];
+                unset($_SESSION['add']);
+            }
+        ?>
+
 
         <a href="<?php echo SITEURL; ?>admin/add-food.php" style="
             display: inline-block;
