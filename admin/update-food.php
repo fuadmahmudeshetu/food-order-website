@@ -1,4 +1,7 @@
-<?php include('partials/menu.php'); ?>
+<?php
+ob_start();
+include('partials/menu.php');
+?>
 
 
 
@@ -121,6 +124,36 @@
             background-color: #fff;
             cursor: pointer;
         }
+
+        .current-img-box {
+            width: 180px;
+            height: 180px;
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+
+        .current-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .current-img:hover {
+            transform: scale(1.05);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 
@@ -135,75 +168,101 @@
         <h1>Update Food</h1>
 
         <?php
-            // Get Food Data
+        // Get Food Data
 
-            if (isset($_GET['id'])) {
+        if (isset($_GET['id'])) {
 
-                $id = $_GET['id'];
+            $id = $_GET['id'];
 
-            }
-        
-        
-        
-        
+            $sql2 = "SELECT * FROM tbl_food WHERE id=$id";
+
+            $result2 = mysqli_query($conn, $sql2);
+
+            $row2 = mysqli_fetch_assoc($result2);
+
+            // Get all the data from database
+            $title = $row2['title'];
+            $description = $row2['description'];
+            $price = $row2['price'];
+            $current_image = $row2['image_name'];
+            $current_category = $row2['category_id'];
+            $featured = $row2['featured'];
+            $active = $row2['active'];
+
+        }
+        else {
+            header('location:'.SITEURL.'admin/manage-food.php');
+        }
+
         ?>
 
         <div class="form-container">
             <form action="" method="post" enctype="multipart/form-data">
                 <label for="title">Title</label>
-                <input type="text" name="title">
+                <input type="text" name="title" value="<?php echo $title; ?>">
 
                 <label for="description">Description</label>
-                <textarea name="description" rows="4" placeholder="Enter description"></textarea>
+                <textarea name="description" rows="4" placeholder="Enter description"><?php echo $description; ?></textarea>
 
                 <label for="price">Price</label>
-                <input type="number" name="price" placeholder="Enter price" id="">
+                <input type="number" name="price" placeholder="Enter price" value="<?php echo $price; ?>">
 
-                <label for="image">Select Image</label>
-                <input type="file" name="image">
+                <label for="image">Current Image</label>
+                <div class="current-img-box">
+                    <?php
+                    if ($current_image != "") {
+                    ?>
+                        <img class="current-img" src="<?php echo SITEURL; ?>images/food/<?php echo $current_image; ?>" alt="Current Image">
+                    <?php
+                    } else { ?>
+                        <span>No Image Found</span>
+                    <?php }
+                    ?>
+                </div>
 
                 <label for="category">Select Category</label>
                 <select name="category" id="">
                     <?php
-                    // Create php code to display categories from database
-                    // Create sql to get all active categories form database
 
                     $sql = "SELECT * FROM tbl_category WHERE active = 'Yes'";
 
                     $result = mysqli_query($conn, $sql);
 
-                    // Count rows to check whether we have category or not
                     $count = mysqli_num_rows($result);
 
                     if ($count > 0) {
-                        // Display category
 
                         while ($row = mysqli_fetch_assoc($result)) {
-                            $id = $row['id'];
-                            $title = $row['title'];
+                            $category_title = $row['title'];
+                            $category_id = $row['id'];
 
-                    ?>
-                            <option value="<?php echo $id; ?>"><?php echo $title; ?></option>
-                        <?php
+                            ?>
+                                <option value="<?php echo $category_id; ?>"><?php echo $category_title; ?></option>
+                            <?php
                         }
-                    } else {
-                        //No category
-                        ?>
-                        <option value="0">No Category Found</option>
-                    <?php
                     }
-
+                    else {
+                        echo "<option value='0'>Category Not Found</option>";
+                    }
+                    
                     ?>
-
                 </select>
 
                 <label for="featured">Featured</label>
-                <input type="radio" name="featured" id="" value="Yes"> Yes
-                <input type="radio" name="featured" id="" value="No"> No
+                <input <?php if ($featured == 'Yes') {
+                    echo "checked";
+                } ?> name="featured" type="radio" value="Yes"> Yes
+                <input <?php if ($featured == 'No') {
+                    echo "checked";
+                } ?> name="featured" type="radio" value="No"> No
 
                 <label for="active">Active</label>
-                <input type="radio" name="active" id="" value="Yes"> Yes
-                <input type="radio" name="active" id="" value="No"> No
+                <input <?php if ($active == 'Yes') {
+                    echo "checked";
+                } ?> type="radio" name="active" id="" value="Yes"> Yes
+                <input <?php if ($active == 'No') {
+                    echo "checked";
+                } ?> type="radio" name="active" id="" value="No"> No
 
                 <input type="submit" name="submit" value="Add Food">
 

@@ -1,18 +1,6 @@
 <?php
-include('../config/constants.php');
-
-// PROCESS FORM BEFORE ANY HTML
-if (isset($_POST['submit'])) {
-
-    // Example: handle upload & DB insert
-
-    // REDIRECT BEFORE ANY HTML
-    header('Location: ' . SITEURL . 'admin/manage-food.php');
-    exit();
-}
-?>
-
-<?php include('partials/menu.php'); ?>
+ob_start();
+include('partials/menu.php'); ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -335,3 +323,4 @@ ob_end_flush();
 ?>
 
 <?php include('partials/footer.php'); ?>
+<?php ob_end_flush(); ?>
