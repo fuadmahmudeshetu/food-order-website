@@ -331,7 +331,7 @@ include('partials/menu.php');
 
                     $result3 = mysqli_query($conn, $sql3);
 
-                    if ($res3 == true) {
+                    if ($result3 == true) {
                         $_SESSION['update'] = "<div style='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
                 background:#d4edda;color:#155724;border:1px solid #c3e6cb;padding:15px 25px;border-radius:10px;
                 font-family:Arial,sans-serif;font-size:16px;box-shadow:0 4px 10px rgba(0,0,0,0.2);text-align:center;z-index:9999;'>
@@ -344,7 +344,7 @@ include('partials/menu.php');
                     },2000);
                 </script>";
                         header('location:' . SITEURL . 'admin/manage-food.php');
-                        exit();
+                        ob_end_flush();
                     } else {
                         $_SESSION['update'] = "<div style='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
                 background:#f8d7da;color:#721c24;border:1px solid #f5c6cb;padding:20px 30px;border-radius:10px;
