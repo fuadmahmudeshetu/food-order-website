@@ -5,14 +5,19 @@
         <h1>Manage Food</h1>
 
         <?php
-        if (isset($_SESSION['add'])) {
-            echo $_SESSION['add'];
-            unset($_SESSION['add']);
-        }
+            if (isset($_SESSION['add'])) {
+                echo $_SESSION['add'];
+                unset($_SESSION['add']);
+            }
 
-        if (isset($_SESSION['delete-food'])) {
-            echo $_SESSION['delete-food'];
-            unset($_SESSION['delete-food']);
+            if (isset($_SESSION['delete-food'])) {
+                echo $_SESSION['delete-food'];
+                unset($_SESSION['delete-food']);
+
+            if (isset($_SESSION['update'])) {
+                echo $_SESSION['update'];
+                unset($_SESSION['update']);
+            }
         }
         ?>
 

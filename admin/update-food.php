@@ -220,6 +220,9 @@ include('partials/menu.php');
                     ?>
                 </div>
 
+                <label for="new-image">New Image</label>
+                <input type="file" name="new-image" id="">
+
                 <label for="category">Select Category</label>
                 <select name="category" id="">
                     <?php
@@ -237,7 +240,9 @@ include('partials/menu.php');
                             $category_id = $row['id'];
 
                             ?>
-                                <option value="<?php echo $category_id; ?>"><?php echo $category_title; ?></option>
+                                <option <?php if ($current_category == $category_id) {
+                                    echo "selected";
+                                } ?> value="<?php echo $category_id; ?>"><?php echo $category_title; ?></option>
                             <?php
                         }
                     }
@@ -264,12 +269,97 @@ include('partials/menu.php');
                     echo "checked";
                 } ?> type="radio" name="active" id="" value="No"> No
 
+                <input type="hidden" name="id" value="<?php echo $id; ?>" id="">
+                <input type="hidden" name="current_image" value="<?php echo $current_image ?>">
                 <input type="submit" name="submit" value="Add Food">
 
             </form>
+
+
+            <?php 
+                if (isset($_POST['submit'])) {
+                    $title = $_POST['title'];
+                    $description = $_POST['description'];
+                    $price = $_POST['price'];
+                    $current_image = $_POST['current_image'];
+                    $featured = $_POST['featured'] ?? "No";
+                    $active = $_POST['active'] ?? "No";
+
+                    if (isset($_FILES['new-image']['name']) && $_FILES['new-image']['name'] != "") {
+                        $image_name = $_FILES['new-image']['name'];
+
+                        $temp = explode('.', $image_name);
+                        $ext = end($temp);
+
+                        $image_name = "Food_" . rand(0000, 9999) . '.' . $ext;
+
+                        $source_path = $_FILES['new-image']['tmp_name'];
+                        $destination_path = "../images/food/" . $image_name;
+
+                        $upload = move_uploaded_file($source_path, $destination_path);
+
+                        if (!$upload) {
+                            $_SESSION['upload'] = "❌ Failed to upload the image.";
+                            header('location:' . SITEURL . 'admin/add-food.php');
+                            die();
+                        }
+
+                        // Remove the old image if it exists
+                        if (!empty($current_image)) {
+                            $remove_path = "../images/food/" . $current_image;
+                            if (!unlink($remove_path)) {
+                                $_SESSION['failed-remove'] = "❌ Failed to remove the old image.";
+                                header('location:' . SITEURL . 'admin/manage-food.php');
+                                die();
+                            }
+                        }
+                    } 
+                    else {
+                        $image_name = $current_image;
+                    }
+
+                    $sql3 = "UPDATE tbl_food SET
+                        title = '$title',
+                        description = '$description',
+                        price = '$price',
+                        image_name = '$image_name',
+                        category_id = '$category',
+                        featured = '$featured',
+                        active = '$active'
+                        WHERE id = $id
+                    ";
+
+                    $result3 = mysqli_query($conn, $sql3);
+
+                    if ($res3 == true) {
+                        $_SESSION['update'] = "<div style='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+                background:#d4edda;color:#155724;border:1px solid #c3e6cb;padding:15px 25px;border-radius:10px;
+                font-family:Arial,sans-serif;font-size:16px;box-shadow:0 4px 10px rgba(0,0,0,0.2);text-align:center;z-index:9999;'>
+                ✅ Food Updated Successfully!
+                </div>
+                <script>
+                    setTimeout(function(){
+                        var popup=document.querySelector('div[style*=\"position:fixed\"]');
+                        if(popup){ popup.style.display='none'; }
+                    },2000);
+                </script>";
+                        header('location:' . SITEURL . 'admin/manage-food.php');
+                        exit();
+                    } else {
+                        $_SESSION['update'] = "<div style='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+                background:#f8d7da;color:#721c24;border:1px solid #f5c6cb;padding:20px 30px;border-radius:10px;
+                font-family:Arial,sans-serif;font-size:16px;box-shadow:0 4px 10px rgba(0,0,0,0.2);text-align:center;'>
+                ❌ Food Update Failed!
+                </div>";
+                        header('location:' . SITEURL . 'admin/update-food.php?id=' . $id);
+                        exit();
+                    }
+                }
+            ?>
         </div>
     </div>
 </div>
+
 
 
 <?php include('partials/footer.php'); ?>

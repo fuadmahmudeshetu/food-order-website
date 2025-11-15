@@ -1,6 +1,8 @@
 <?php
 ob_start();
-include('partials/menu.php'); ?>
+include('partials/menu.php'); 
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -294,7 +296,7 @@ if (isset($_POST['submit'])) {
 
         // Redirect to the the add category page
         header('location:' . SITEURL . 'admin/manage-food.php');
-        exit();
+        
     } else {
 
         $_SESSION['add'] = "<div style='position: fixed; 
@@ -315,7 +317,7 @@ if (isset($_POST['submit'])) {
                         ";
         // Redirect to add category page
         header('location:' . SITEURL . 'admin/add-food.php');
-        exit();
+        ob_end_flush();
     }
 }
 
@@ -323,4 +325,3 @@ ob_end_flush();
 ?>
 
 <?php include('partials/footer.php'); ?>
-<?php ob_end_flush(); ?>
