@@ -58,22 +58,22 @@ if (isset($_GET['category_id'])) {
                 $image_name = $row['image_name'];
 
         ?>
-            <div class="food-menu-box">
-                <div class="food-menu-img">
-                    <img src="<?php echo SITEURL; ?>images/food/<?php echo $image_name; ?>" alt="Chicke Hawain Pizza" class="img-responsive img-curve">
-                </div>
+                <div class="food-menu-box">
+                    <div class="food-menu-img">
+                        <img src="<?php echo SITEURL; ?>images/food/<?php echo $image_name; ?>" alt="Chicke Hawain Pizza" class="img-responsive img-curve">
+                    </div>
 
-                <div class="food-menu-desc">
-                    <h4><?php echo $title; ?></h4>
-                    <p class="food-price">$<?php echo $price; ?></p>
-                    <p class="food-detail">
-                        <?php echo $description; ?>
-                    </p>
-                    <br>
+                    <div class="food-menu-desc">
+                        <h4><?php echo $title; ?></h4>
+                        <p class="food-price">$<?php echo $price; ?></p>
+                        <p class="food-detail">
+                            <?php echo $description; ?>
+                        </p>
+                        <br>
 
-                    <a href="#" class="btn btn-primary">Order Now</a>
+                        <a href="<?php echo SITEURL ?>order.php?food_id=<?php echo $id; ?>" class="btn btn-primary">Order Now</a>
+                    </div>
                 </div>
-            </div>
         <?php
             }
         } else {
