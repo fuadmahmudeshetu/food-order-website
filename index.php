@@ -99,8 +99,6 @@ include('partials-front/menu.php');
             echo "<h2>There Is No Food</h2>";
         }
 
-
-
         ?>
 
         <div class="clearfix"></div>
