@@ -115,7 +115,7 @@ if (isset($_POST['submit'])) {
 
     if ($res2) {
         echo "
-    <div style=\"
+    <div id='popup-msg' style=\"
         position: fixed;
         top: 50%;
         left: 50%;
@@ -128,13 +128,22 @@ if (isset($_POST['submit'])) {
         font-weight: 500;
         box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         z-index: 9999;
+        transition: opacity 0.5s ease;
     \">
         ✔ Food Ordered Successfully
     </div>
+
+    <script>
+        setTimeout(function() {
+            var msg = document.getElementById('popup-msg');
+            msg.style.opacity = '0';
+            setTimeout(function() { msg.style.display = 'none'; }, 500);
+        }, 3000);
+    </script>
     ";
     } else {
         echo "
-    <div style=\"
+    <div id='popup-msg' style=\"
         position: fixed;
         top: 50%;
         left: 50%;
@@ -147,9 +156,18 @@ if (isset($_POST['submit'])) {
         font-weight: 500;
         box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         z-index: 9999;
+        transition: opacity 0.5s ease;
     \">
         ❌ Failed: " . mysqli_error($conn) . "
     </div>
+
+    <script>
+        setTimeout(function() {
+            var msg = document.getElementById('popup-msg');
+            msg.style.opacity = '0';
+            setTimeout(function() { msg.style.display = 'none'; }, 500);
+        }, 2000);
+    </script>
     ";
     }
 }
