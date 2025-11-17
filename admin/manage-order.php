@@ -72,7 +72,7 @@
                             <td style="padding: 12px 15px; border: 1px solid #ddd;"><?php echo $customer_email; ?></td>
                             <td style="padding: 12px 15px; border: 1px solid #ddd;"><?php echo $customer_address; ?></td>
                             <td style="padding: 12px 15px; border: 1px solid #ddd;">
-                                <a href="#" style="background-color: #4CAF50; padding: 6px 12px; color: white; border-radius: 4px; text-decoration: none;">Update</a>
+                                <a href="<?php echo SITEURL; ?>admin/update-order.php?id=<?php echo $id; ?>" style="background-color: #4CAF50; padding: 6px 12px; color: white; border-radius: 4px; text-decoration: none;">Update</a>
                             </td>
                         </tr>
 
