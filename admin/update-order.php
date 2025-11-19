@@ -102,11 +102,11 @@
             $customer_contact = $row['customer_contact'];
             $customer_email = $row['customer_email'];
             $customer_address = $row['customer_address'];
-            
         } else {
+
         }
     } else {
-
+        
     }
     ?>
 
@@ -119,7 +119,7 @@
 
                     <div class="form-group">
                         <label for="food-name">Food Name</label>
-                        <input type="text" id="food-name" name="food-name" value="<?php echo $food; ?>" required>
+                        <h3><?php echo $food; ?></h3>
                     </div>
 
                     <div class="form-group">
@@ -138,9 +138,7 @@
                             <option <?php if ($status == "Ordered") {
                                         echo "selected";
                                     } ?> value="Ordered">Ordered</option>
-                            <option <?php if ($status == "Ordered") {
-                                        echo "selected";
-                                    } ?> <?php if ($status == "Preparing") {
+                            <option <?php if ($status == "Preparing") {
                                                 echo "selected";
                                             } ?> value="Preparing">Preparing</option>
                             <option <?php if ($status == "Out for Delivery") {
@@ -172,7 +170,7 @@
 
                     <div class="form-group">
                         <label for="customer_address">Customer Address:</label>
-                        <textarea id="customer_address" name="customer_address" rows="4" required><?php echo $customer_address; ?></textarea>
+                        <textarea id="customer_address" name="customer_address" rows="4"><?php echo $customer_address; ?></textarea>
                     </div>
 
                     <input type="hidden" name="id" value="<?php echo $id; ?>" id="">
@@ -190,6 +188,7 @@
             $qty = $_POST['qty'];
             $price = $_POST['price'];
             $total = $qty * $price;
+            $status = $_POST['status'];
 
             $customer_name = $_POST['customer_name'];
             $customer_contact = $_POST['customer_contact'];
@@ -211,10 +210,8 @@
             $res2 = mysqli_query($conn, $sql2);
 
             if ($res2) {
-                $_SESSION['update'] = "<h1 style='color: green;'>Order Updated Successfully</h1>";
-
                 // Redirect to the manage admin page 
-                header('location:' . SITEURL . 'admin/manage-order.php');
+                // header('location:' . SITEURL . 'admin/manage-order.php');
             }
             else {
 
