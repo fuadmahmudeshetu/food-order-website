@@ -66,7 +66,17 @@
                             <td style="padding: 12px 15px; border: 1px solid #ddd;"><?php echo $qty; ?></td>
                             <td style="padding: 12px 15px; border: 1px solid #ddd;"><?php echo $total; ?></td>
                             <td style="padding: 12px 15px; border: 1px solid #ddd;"><?php echo $order_date; ?></td>
-                            <td style="padding: 12px 15px; border: 1px solid #ddd;"><?php echo $status; ?></td>
+                            <td style="padding: 12px 15px; border: 1px solid #ddd;
+                                <?php
+                                    if ($status == 'Delivered') echo 'color: green; font-weight: bold;';
+                                    elseif ($status == 'Preparing') echo 'color: orange; font-weight: bold;';
+                                    elseif ($status == 'Out for Delivery') echo 'color: blue; font-weight: bold;';
+                                    elseif ($status == 'Ordered') echo 'color: #555; font-weight: bold;';
+                                    elseif ($status == 'Cancelled') echo 'color: red; font-weight: bold;';
+                                ?>
+                                ">
+                                <?php echo $status; ?>
+                            </td>
                             <td style="padding: 12px 15px; border: 1px solid #ddd;"><?php echo $customer_name; ?></td>
                             <td style="padding: 12px 15px; border: 1px solid #ddd;"><?php echo $customer_contact; ?></td>
                             <td style="padding: 12px 15px; border: 1px solid #ddd;"><?php echo $customer_email; ?></td>
