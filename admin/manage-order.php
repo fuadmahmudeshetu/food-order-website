@@ -4,6 +4,13 @@
     <div class="wrapper">
         <h1>Manage Order</h1>
 
+        <?php 
+            if (isset($_SESSION['update'])) {
+                echo $_SESSION['update'];
+                unset($_SESSION['update']);
+            }
+        ?>
+
         <!-- Responsive Table Wrapper -->
         <div style="
             width: 100%;

@@ -102,11 +102,11 @@
             $customer_contact = $row['customer_contact'];
             $customer_email = $row['customer_email'];
             $customer_address = $row['customer_address'];
+            
         } else {
         }
     } else {
 
-        header('location:' . SITEURL . 'manage-admin.php');
     }
     ?>
 
@@ -136,41 +136,93 @@
                         <label for="status">Status</label>
                         <select id="status" name="status">
                             <option <?php if ($status == "Ordered") {
-                                echo "selected";
-                            } ?> value="Ordered">Ordered</option>
-                            <option value="Preparing">Preparing</option>
-                            <option value="Out for Delivery">Out for Delivery</option>
-                            <option value="Delivered">Delivered</option>
-                            <option value="Cancelled">Cancelled</option>
+                                        echo "selected";
+                                    } ?> value="Ordered">Ordered</option>
+                            <option <?php if ($status == "Ordered") {
+                                        echo "selected";
+                                    } ?> <?php if ($status == "Preparing") {
+                                                echo "selected";
+                                            } ?> value="Preparing">Preparing</option>
+                            <option <?php if ($status == "Out for Delivery") {
+                                        echo "selected";
+                                    } ?> value="Out for Delivery">Out for Delivery</option>
+                            <option <?php if ($status == "Delivered") {
+                                        echo "selected";
+                                    } ?> value="Delivered">Delivered</option>
+                            <option <?php if ($status == "Cancelled") {
+                                        echo "selected";
+                                    } ?> value="Cancelled">Cancelled</option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="customer_name">Customer Name</label>
-                        <input type="text" id="customer_name" name="customer_name" value="Jane Doe" required>
+                        <input type="text" id="customer_name" name="customer_name" value="<?php echo $customer_name; ?>" required>
                     </div>
 
                     <div class="form-group">
                         <label for="customer_contact">Customer Contact:</label>
-                        <input type="tel" id="customer_contact" name="customer_contact" value="123-456-7890" required>
+                        <input type="tel" id="customer_contact" name="customer_contact" value="<?php echo $customer_contact; ?>" required>
                     </div>
 
                     <div class="form-group">
                         <label for="customer_email">Customer Email:</label>
-                        <input type="email" id="customer_email" name="customer_email" value="jane@example.com" required>
+                        <input type="email" id="customer_email" name="customer_email" value="<?php echo $customer_email; ?>" required>
                     </div>
 
                     <div class="form-group">
                         <label for="customer_address">Customer Address:</label>
-                        <textarea id="customer_address" name="customer_address" rows="4" required>123 Main St, Apt 4B, Anytown, USA</textarea>
+                        <textarea id="customer_address" name="customer_address" rows="4" required><?php echo $customer_address; ?></textarea>
                     </div>
 
-                    <button type="submit" class="update-btn">Update Order</button>
+                    <input type="hidden" name="id" value="<?php echo $id; ?>" id="">
+                    <input type="hidden" name="price" value="<?php echo $price; ?>" id="">
+                    <input type="submit"  name="update" value="Update Order"  class="update-btn">
                 </form>
             </h1>
         </div>
     </div>
 
+    <?php 
+        if (isset($_POST['update'])) {
+            // Get all elements from the form
+            $id = $_POST['id'];
+            $qty = $_POST['qty'];
+            $price = $_POST['price'];
+            $total = $qty * $price;
+
+            $customer_name = $_POST['customer_name'];
+            $customer_contact = $_POST['customer_contact'];
+            $customer_email = $_POST['customer_email'];
+            $customer_address = $_POST['customer_address'];
+
+            $sql2 = "UPDATE tbl_order SET
+                qty = '$qty',
+                total = $total,
+                status = '$status',
+                customer_name = '$customer_name',
+                customer_contact = '$customer_contact',
+                customer_email = '$customer_email',
+                customer_address = '$customer_address'
+
+                WHERE id = $id
+            ";
+
+            $res2 = mysqli_query($conn, $sql2);
+
+            if ($res2) {
+                $_SESSION['update'] = "<h1 style='color: green;'>Order Updated Successfully</h1>";
+
+                // Redirect to the manage admin page 
+                header('location:' . SITEURL . 'admin/manage-order.php');
+            }
+            else {
+
+                // Redirect to the manage admin page 
+                header('location:' . SITEURL . 'admin/manage-admin.php');
+            }
+        }
+    ?>
 
 </body>
 
