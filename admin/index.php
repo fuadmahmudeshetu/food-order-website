@@ -47,11 +47,11 @@
             <?php 
               $sql3 = "SELECT SUM(total) AS TotalRevenue FROM tbl_order";
               $res3 = mysqli_query($conn, $sql3);
-              $row = mysqli_fetch_assoc($conn, $res3);
+              $row = mysqli_fetch_assoc($res3);
 
               $total_revenue = $row['TotalRevenue'];
             ?>
-            <h1><?php echo $total_revenue; ?></h1>
+            <h1>$<?php echo $total_revenue; ?></h1>
             <br>
             Revenue Generated
         </div>
